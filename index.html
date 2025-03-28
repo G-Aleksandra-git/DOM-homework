@@ -8,11 +8,11 @@
 
   <body>
     <div class="container">
-      <ul class="comments">
+      <ul id="comments-list" class="comments">
         <li class="comment">
           <div class="comment-header">
             <div>Глеб Фокин</div>
-            <div>12.02.22 12:18</div>
+            <div>10.02.2022</div>
           </div>
           <div class="comment-body">
             <div class="comment-text">
@@ -45,19 +45,19 @@
         </li>
       </ul>
       <div class="add-form">
-        <input
+        <input id="name"
           type="text"
           class="add-form-name"
           placeholder="Введите ваше имя"
         />
-        <textarea
+        <textarea id="text-comment"
           type="textarea"
           class="add-form-text"
           placeholder="Введите ваш коментарий"
           rows="4"
         ></textarea>
         <div class="add-form-row">
-          <button class="add-form-button">Написать</button>
+          <button id="to-write" class="add-form-button">Написать</button>
         </div>
       </div>
     </div>
@@ -65,7 +65,50 @@
 
   <script>
     "use strict";
-    // Код писать здесь
+   
+      const writeButton = document.getElementById("to-write"); //кнопка "Написать" в переменную сохраняем
+
+    // Обработчик для кнопки "Написать"
+    writeButton.addEventListener("click", function () {
+      const name = document.getElementById("name").value;
+      const commentText = document.getElementById("text-comment").value;
+
+      // Проверяем, что поля не пустые
+      if (name.trim() === "" || commentText.trim() === "") {
+        alert("Пожалуйста, заполните оба поля.");
+      } else {
+        // новый комментарий с помощью шаблонной строки
+        const newComment = `
+          <li class="comment">
+            <div class="comment-header">
+              <div>${name}</div>
+              <div>${new Date().toLocaleString()}</div>
+            </div>
+            <div class="comment-body">
+              <div class="comment-text">
+                ${commentText}
+              </div>
+            </div>
+            <div class="comment-footer">
+              <div class="likes">
+                <span class="likes-counter">0</span>
+                <button class="like-button"></button>
+              </div>
+            </div>
+          </li>
+        `;
+
+        // Добавляем новый комментарий в список
+        document.getElementById("comments-list").innerHTML += newComment;
+
+        // Очищаем поля ввода
+        document.getElementById("name").value = "";
+        document.getElementById("text-comment").value = "";
+      }
+    });
+
     console.log("It works!");
+
+
   </script>
 </html>
