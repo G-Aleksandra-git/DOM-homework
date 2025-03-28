@@ -65,19 +65,11 @@
 
   <script>
     "use strict";
-    // Обработчик для изменения поля "Имя"
-    document.getElementById("name").addEventListener("input", function () {
-      console.log("Изменено имя: ", this.value);
-    });
+   
+      const writeButton = document.getElementById("to-write"); //кнопка "Написать" в переменную сохраняем
 
-    // Обработчик для изменения поля "Комментарий"
-    document.getElementById("text-comment").addEventListener("input", function () {
-      console.log("Изменен комментарий: ", this.value);
-    });
-    
-
-      // Обработчик для кнопки "Написать"
-    document.getElementById("to-write").addEventListener("click", function () {
+    // Обработчик для кнопки "Написать"
+    writeButton.addEventListener("click", function () {
       const name = document.getElementById("name").value;
       const commentText = document.getElementById("text-comment").value;
 
@@ -85,7 +77,7 @@
       if (name.trim() === "" || commentText.trim() === "") {
         alert("Пожалуйста, заполните оба поля.");
       } else {
-        // Создаем новый комментарий с помощью шаблонной строки
+        // новый комментарий с помощью шаблонной строки
         const newComment = `
           <li class="comment">
             <div class="comment-header">
@@ -116,6 +108,7 @@
     });
 
     console.log("It works!");
+
 
   </script>
 </html>
