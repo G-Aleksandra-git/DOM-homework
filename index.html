@@ -95,12 +95,10 @@
       }
 
 
-
-
     const renderComments = () => {
       const commentsHtml = comments
       .map((comment, index) => {
-        // Добавляем data-атрибут с лайком
+        
         return `<li class="comment">
           <div class="comment-header">
             <div>${comment.name}</div>
@@ -125,8 +123,8 @@
       toggleLike(); // Для изменения лайков
 
     }
-    const list = document.getElementById("comments-list");
-    const writeButton = document.getElementById("to-write"); //кнопка "Написать" в переменную сохраняем
+    const list = document.getElementById("comments-list"); 
+    const writeButton = document.getElementById("to-write"); //кнопка "Написать", в переменную сохраняем
    
 
     // Обработчик для кнопки "Написать"
@@ -148,7 +146,7 @@
           isLiked: false
         });
 
-        // Добавляем новый комментарий в список
+           // Добавляем новый комментарий в список
         // document.getElementById("comments-list").innerHTML += newComment;
         renderComments();
 
@@ -159,7 +157,8 @@
     });
 
     console.log("It works!");
-
+   
+    
 
   </script>
 </html>
