@@ -48,14 +48,13 @@
         <input id="name"
           type="text"
           class="add-form-name"
-          placeholder="Введите ваше имя"
-        />
+          placeholder="Введите ваше имя"/>
         <textarea id="text-comment"
           type="textarea"
           class="add-form-text"
           placeholder="Введите ваш коментарий"
-          rows="4"
-        ></textarea>
+          rows="4">
+        </textarea>
         <div class="add-form-row">
           <button id="to-write" class="add-form-button">Написать</button>
         </div>
@@ -65,8 +64,70 @@
 
   <script>
     "use strict";
+      // Создаем массив объектов (комментариев)
+    const comments = [
+      { name: "Глеб Фокин",
+        date: "10.02.2022",
+        text: "Это будет первый комментарий на этой странице",
+        likes: 3,
+        isLiked: false
+      },
+      { name: "Варвара Н.",
+        date: "13.02.22 19:22",
+        text: "Мне нравится как оформлена эта страница! ❤",
+        likes: 75,
+        isLiked: true
+      }];
+
+      const toggleLike = () => {
+        const likeButton = document.querySelectorAll(".like-button")
+
+        likeButton.forEach((element, index) => {
+          element.addEventListener('click', () => {
+            const comment = comments[index]; // изменяет лайки на противоположный
+            comment.isLiked = !comment.isLiked;
+            comment.likes += comment.isLiked ? 1 : -1;
+
+            renderComments();                    
+          })          
+        })
+
+      }
+
+
+
+
+    const renderComments = () => {
+      const commentsHtml = comments
+      .map((comment, index) => {
+        // Добавляем data-атрибут с лайком
+        return `<li class="comment">
+          <div class="comment-header">
+            <div>${comment.name}</div>
+            <div>${comment.date}</div>
+          </div>
+          <div class="comment-body">
+            <div class="comment-text">
+              ${comment.text}
+            </div>
+          </div>
+          <div class="comment-footer">
+            <div class="likes">
+              <span class="likes-counter">${comment.likes}</span>
+              <button class="like-button ${comment.isLiked ? '-active-like' : ''}"></button>
+            </div>
+          </div>
+        </li>`
+      })
+      .join("");
+      list.innerHTML = commentsHtml;
+
+      toggleLike(); // Для изменения лайков
+
+    }
+    const list = document.getElementById("comments-list");
+    const writeButton = document.getElementById("to-write"); //кнопка "Написать" в переменную сохраняем
    
-      const writeButton = document.getElementById("to-write"); //кнопка "Написать" в переменную сохраняем
 
     // Обработчик для кнопки "Написать"
     writeButton.addEventListener("click", function () {
@@ -78,28 +139,18 @@
         alert("Пожалуйста, заполните оба поля.");
       } else {
         // новый комментарий с помощью шаблонной строки
-        const newComment = `
-          <li class="comment">
-            <div class="comment-header">
-              <div>${name}</div>
-              <div>${new Date().toLocaleString()}</div>
-            </div>
-            <div class="comment-body">
-              <div class="comment-text">
-                ${commentText}
-              </div>
-            </div>
-            <div class="comment-footer">
-              <div class="likes">
-                <span class="likes-counter">0</span>
-                <button class="like-button"></button>
-              </div>
-            </div>
-          </li>
-        `;
+        
+        comments.push({
+          name: name,
+          date: new Date().toLocaleString(),
+          text: commentText,
+          likes: 0,
+          isLiked: false
+        });
 
         // Добавляем новый комментарий в список
-        document.getElementById("comments-list").innerHTML += newComment;
+        // document.getElementById("comments-list").innerHTML += newComment;
+        renderComments();
 
         // Очищаем поля ввода
         document.getElementById("name").value = "";
