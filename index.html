@@ -80,11 +80,12 @@
       }];
 
       const toggleLike = () => {
-        const likeButton = document.querySelectorAll(".like-button")
+        const likeButtons = document.querySelectorAll(".like-button")
 
-        likeButton.forEach((element, index) => {
-          element.addEventListener('click', () => {
-            const comment = comments[index]; // изменяет лайки на противоположный
+        likeButtons.forEach((button) => {
+          button.addEventListener('click', () => {
+            const index = button.dataset.index; // получаем индекс из data-атрибута
+            const comment = comments[index];
             comment.isLiked = !comment.isLiked;
             comment.likes += comment.isLiked ? 1 : -1;
 
@@ -112,7 +113,7 @@
           <div class="comment-footer">
             <div class="likes">
               <span class="likes-counter">${comment.likes}</span>
-              <button class="like-button ${comment.isLiked ? '-active-like' : ''}"></button>
+              <button class="like-button ${comment.isLiked ? '-active-like' : ''}" data-index="${index}"></button>
             </div>
           </div>
         </li>`
