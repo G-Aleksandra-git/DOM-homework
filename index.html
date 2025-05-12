@@ -64,6 +64,7 @@
 
   <script>
     "use strict";
+    
       // Создаем массив объектов (комментариев)
     const comments = [
       { name: "Глеб Фокин",
@@ -79,35 +80,50 @@
         isLiked: true
       }];
 
+      let highlightedIndex = null; // хранит выделение комментария
+
       const toggleLike = () => {
         const likeButtons = document.querySelectorAll(".like-button")
 
         likeButtons.forEach((button) => {
-          button.addEventListener('click', () => {
+          button.addEventListener('click', (event) => {
             const index = button.dataset.index; // получаем индекс из data-атрибута
             const comment = comments[index];
             comment.isLiked = !comment.isLiked;
             comment.likes += comment.isLiked ? 1 : -1;
+            event.stopPropagation(); // чтоб не цитировался комментарий при клике на иконку лайка
 
             renderComments();                    
           })          
         })
 
       }
-
+      // фия для безопасности ввода,будет удалять теги и др. опасные символы из строки
+      const sanitizeInput = (str) => { 
+        return str
+          .replace(/</g, "")
+          .replace(/>/g, "")
+          .replace(/"/g, "")
+          .replace(/'/g, "")
+          .replace(/\//g, "")
+          .trim();
+      };
 
     const renderComments = () => {
       const commentsHtml = comments
       .map((comment, index) => {
         
-        return `<li class="comment">
+        return `<li class="comment ${highlightedIndex === index ? 'highlighted' : ''}">
           <div class="comment-header">
             <div>${comment.name}</div>
             <div>${comment.date}</div>
           </div>
           <div class="comment-body">
             <div class="comment-text">
-              ${comment.text}
+              ${comment.text
+                .split('\n')
+                .map(line => `<p>${line}</p>`)
+                .join('')}
             </div>
           </div>
           <div class="comment-footer">
@@ -121,17 +137,32 @@
       .join("");
       list.innerHTML = commentsHtml;
 
-      toggleLike(); // Для изменения лайков
+      // Обработка клика на комментарий
+      const commentElements = document.querySelectorAll('.comment');
+      commentElements.forEach((element, index) => {
+        element.addEventListener('click', () => {
+          const comment = comments[index];
+          const textarea = document.getElementById("text-comment");
 
-    }
+          textarea.value = `«${comment.name}: ${comment.text}»\n\n`;
+          textarea.focus(); // чтобы сразу можно было продолжить писать
+
+          highlightedIndex = index;
+          renderComments();
+        });
+      });
+
+      toggleLike(); // Для изменения лайков
+    };
+
     const list = document.getElementById("comments-list"); 
     const writeButton = document.getElementById("to-write"); //кнопка "Написать", в переменную сохраняем
    
 
     // Обработчик для кнопки "Написать"
     writeButton.addEventListener("click", function () {
-      const name = document.getElementById("name").value;
-      const commentText = document.getElementById("text-comment").value;
+      const name = sanitizeInput(document.getElementById("name").value); // удаляем опасные символы при вводе имени в комментарии
+      const commentText = sanitizeInput(document.getElementById("text-comment").value);// удаляем опасные символы при вводе текста в комментарии
 
       // Проверяем, что поля не пустые
       if (name.trim() === "" || commentText.trim() === "") {
@@ -146,6 +177,8 @@
           likes: 0,
           isLiked: false
         });
+        
+        highlightedIndex = null; // подсветка комментария исчезает после отправки коммента
 
            // Добавляем новый комментарий в список
         // document.getElementById("comments-list").innerHTML += newComment;

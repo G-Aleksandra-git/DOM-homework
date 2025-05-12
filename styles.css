@@ -63,6 +63,13 @@ body {
   .comment-text {
     font-size: 32px;
   }
+  
+  .comment.highlighted {
+    border: 2px solid #bcec30;
+    background-color: #2a2a2a;
+    transition: background-color 0.3s, border 0.3s;
+  }
+  
 
   .likes {
     display: flex;
