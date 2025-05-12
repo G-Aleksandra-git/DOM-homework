@@ -98,7 +98,16 @@
         })
 
       }
-
+      // фия для безопасности ввода,будет удалять теги и др. опасные символы из строки
+      const sanitizeInput = (str) => { 
+        return str
+          .replace(/</g, "")
+          .replace(/>/g, "")
+          .replace(/"/g, "")
+          .replace(/'/g, "")
+          .replace(/\//g, "")
+          .trim();
+      };
 
     const renderComments = () => {
       const commentsHtml = comments
@@ -152,8 +161,8 @@
 
     // Обработчик для кнопки "Написать"
     writeButton.addEventListener("click", function () {
-      const name = document.getElementById("name").value.replaceAll("<", "").replaceAll(">", "");
-      const commentText = document.getElementById("text-comment").value.replaceAll("<", "").replaceAll(">", "");
+      const name = sanitizeInput(document.getElementById("name").value); // удаляем опасные символы при вводе имени в комментарии
+      const commentText = sanitizeInput(document.getElementById("text-comment").value);// удаляем опасные символы при вводе текста в комментарии
 
       // Проверяем, что поля не пустые
       if (name.trim() === "" || commentText.trim() === "") {
